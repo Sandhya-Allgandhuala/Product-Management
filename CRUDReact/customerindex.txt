@@ -1,0 +1,324 @@
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { Table, Button, Icon, Menu, Form } from 'semantic-ui-react';
+import AddeditCustomer from './Components/AddeditCustomer.jsx'
+
+export default class CustomerList extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false,
+            CustomerData: [],
+            error: null,
+            showModal: false,
+            showConfirm: false,
+            record: {}
+                        
+        }; 
+        this.handleSubmit = this.handleSubmit.bind(this);
+
+        // Called by the onClick event of Add New button.
+        this.addNew = this.addNew.bind(this);
+        // Called by one of the Edit buttons' click events.
+        this.edit = this.edit.bind(this);
+        // Called by the Cancel button of the AddEditModal.
+        this.cancel = this.cancel.bind(this);
+        // Called by the Save button of the AddEditModal.
+        this.save = this.save.bind(this);
+
+    }
+
+    componentDidMount() {
+
+        this.fetchData();
+
+    }
+
+    //fetchData is to get all the record from database and shows in front end
+    fetchData() {
+
+        this.setState({
+            isLoading: true,
+            CustomerData: []
+
+        })
+
+        fetch('/home/GetCustomerData/')
+            .then(response => response.json())
+            .then(CustomerData => this.setState({
+                CustomerData,
+                isLoading: true
+
+            }))
+
+            .catch(error => console.log('parsing failed', error))
+
+    }
+
+    addNew() {
+        // We want to make sure that we pass in an empty object for the record.
+        // If we don't set record to a new empty object it could be whatever
+        // was last edited.
+        this.setState({
+            record: {}, // Try commenting out this code and see.
+            showModal: true
+        });
+    }
+
+    edit(recordToEdit) {
+        this.setState({
+            record: recordToEdit,
+            showModal: true
+        });
+    }
+
+    cancel() {
+        this.setState({
+            showModal: false
+        });
+    }
+
+    save(recordToSave) {
+        const closeModal = () => this.setState({ showModal: false });
+        if (recordToSave.ID) {
+            this.update(recordToSave, closeModal);
+        } else {
+             this.create(recordToSave, closeModal);
+           
+        }
+    }
+    
+    create(recordToCreate, callback) {
+        
+        const createRecord = JSON.stringify(recordToCreate);
+        fetch('/home/SaveCustomerData/', {
+            method: "POST",
+            headers: new Headers({
+                "Content-Type": "application/json"
+            }),
+            body: createRecord
+        }) // We're parsing the response as JSON.
+            .then(response => response.json())            
+            .then(bodyAsObject => {
+                if (bodyAsObject.success) {
+                    this.setState(state => {
+                       
+                        const newRecords = [...state.CustomerData, bodyAsObject.data];
+                        return {
+                            CustomerData: newRecords
+                        };
+                    }, callback);
+                } else {
+                        this.setState(
+                        {
+                            error: bodyAsObject.message
+                        },
+                        callback
+                    );
+                }
+            })
+            .catch(error => {
+                this.setState(
+                    {
+                        error: "There was an error communicating with the back-end"
+                    },
+                    callback
+                );
+            });
+    }
+
+    
+    //handleSubmit function is to add record in database and update front end
+    handleSubmit(event) {        
+        event.preventDefault();
+        const data = new FormData(event.target);
+           fetch('/home/SaveCustomerData/', {
+               method: 'POST',
+               body: data,
+           })
+               .then(response => response.json())
+               .then(bodyAsObject => {
+                   if (bodyAsObject.success) {
+                    this.setState(state => {
+
+                        const newRecord = [...state.CustomerData, bodyAsObject.data];
+
+                    return {
+                        CustomerData: newRecord
+                    };
+                   });
+                }
+                else {
+                    this.setState(
+                    {
+                        error: bodyAsObject.message
+                    });
+                   }
+               })
+            .catch(error => {
+                this.setState(
+                   {
+                error: "There was an error communicating with the back-end"
+                    });
+             });
+       
+
+    }
+
+    //HandleEdit Function is to edit the records in database and update front end
+    // Need to implement
+    handleEdit(event, EditRecord) {
+          event.preventDefault();
+        const data = new FormData(event.target);
+        
+        fetch("/home/UpdateCustomerData" +
+            EditRecord.ID,
+            {
+                method: "GET",
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                }),
+                body: data
+            }
+        )
+            .then(response => response.json())
+            .then(bodyAsObject => {
+                if (bodyAsObject.success) {
+
+                    let updatedRecords = this.state.CustomerData.slice();
+                    const recordIndex = updatedRecords.findIndex(
+                        record => record.ID === editRecord.ID
+                    );
+                    updatedRecords[recordIndex] = editRecord;
+
+                    this.setState(
+                        {
+                            CustomerData: updatedRecords
+                        }
+                    );
+                } else {
+                    this.setState(
+                        {
+                            error: bodyAsObject.message
+                        }
+                    );
+                }
+            })
+            .catch(error => {
+                this.setState(
+                    {
+                        error: "There was an error communicating with the back-end"
+                    }
+                );
+            });
+
+    }
+    
+    //HandleDelete function is to delete record in database and update front end
+    handleDelete(DeleteRecord) {
+
+        fetch('/home/DeleteCustomerData/' + DeleteRecord.ID)
+            .then(response => response.json())
+            .then(bodyAsObject => {
+                if (bodyAsObject.success) {
+                    const updatedCustomers = this.state.CustomerData.filter(record => record.ID != DeleteRecord.ID);
+                        // Update the state.
+                    this.setState({ CustomerData: updatedCustomers });
+               }
+               else {
+                    this.setState({
+                    error: bodyAsObject.message
+                    });
+                 }
+              })
+             .catch(error => {
+                 this.setState({
+                      error: 'There was an error communicating with the back-end'
+                 });
+            }); 
+
+    }
+
+
+    render() {
+
+        return ( 
+            this.state.error ?
+                <div>{this.state.error}</div>
+                :
+                <div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <React.Fragment>
+                        {this.state.showModal && (
+                            <AddeditCustomer
+                                isOpen={true}
+                                record={this.state.record}
+                                header={this.state.record.ID ? "Edit" : "Add"}
+                                save={this.save}
+                                cancel={this.cancel}
+                            />
+                        )}
+                        {this.state.showConfirm && (
+                            <Confirm
+                                open={true}
+                                onCancel={this.cancelDelete}
+                                onConfirm={this.confirmDelete}
+                            />
+                        )}
+                        <br />
+                        
+                        <form onSubmit={this.handleSubmit}>
+
+                        <label htmlFor="name">Name</label>
+                        <input id="name" ref="name" name="name" type="text" />                       
+
+                        <label htmlFor="address">Address</label>
+                        <input id="address" ref="address" name="address" type="text" />
+                        
+
+                            <button className="btn btn-primary" >Add Customer</button>
+
+                        </form>
+                    <br />
+                    <table className="ui striped table">   
+                    <thead>
+                        <tr>
+                            <th className="five wide">Name</th>
+                            <th className="five wide">Address</th>
+                            <th className="five wide">Edit Action</th>
+                            <th className="five wide">Delete Action</th>
+                           <th><Button onClick={this.addNew}>Add New</Button></th>
+
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {
+                                this.state.CustomerData.map(record =>
+                                    <tr key={record.ID} >                          
+                                    <td className="five wide">{record.Name}</td>
+                                            <td className="five wide">{record.Address}</td>
+                                            <td className="five wide"><button className="btn btn-primary" onClick={() => this.edit(record)}><i className="pencil icon"></i>Edit</button></td>
+                                    <td><button className="btn btn-primary" onClick={() => this.handleDelete(record)}><i className="remove icon"></i> Delete</button></td>
+                                </tr>
+                        )
+                            }
+                    </tbody>
+                        </table>
+                    </React.Fragment>
+                
+                    </div>
+                
+        );
+    }
+}
+
+
+//React call customer list in main id
+const app = document.getElementById('main');
+ReactDOM.render(
+    <CustomerList />, app
+);
