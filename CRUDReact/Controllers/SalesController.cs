@@ -18,7 +18,7 @@ namespace CRUDReact.Controllers
         [HttpGet]
         public JsonResult GetSalesData()
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
                var st0 = db.Sales.Include("Customer").Include("Product").Include("Store").ToList();
                 var data = st0.Select(x => new { x.ID,CustomerName= x.Customer.Name , ProductName= x.Product.Name,StoreName = x.Store.Name, DateSold = x.DateSold.ToString("yyyy/MM/dd")});
@@ -33,7 +33,7 @@ namespace CRUDReact.Controllers
         {
             try
             {
-                using (TransactionModelEntities db = new TransactionModelEntities())
+                using (TransactionEntities db = new TransactionEntities())
                 {
                     db.Sales.Add(sale);
                     db.SaveChanges();
@@ -50,7 +50,7 @@ namespace CRUDReact.Controllers
         [HttpPut]
         public JsonResult UpdateSalesData(Sale sales)
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
                 if (ModelState.IsValid)
                 {
@@ -64,7 +64,7 @@ namespace CRUDReact.Controllers
                         var result = db.Sales.SingleOrDefault(a => a.ID == sales.ID);
                         if (result == null)
                         {
-                            return Json(new { success = false, message = "Cannot find customer to update" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { success = false, message = "Cannot find Sales to update" }, JsonRequestBehavior.AllowGet);
                         }
                         else
                         {
@@ -76,7 +76,7 @@ namespace CRUDReact.Controllers
                 }
             }
 
-            return Json(new { success = false, message = "Invalid customer given" }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = false, message = "Invalid Sales given" }, JsonRequestBehavior.AllowGet);
         }
 
         //Delete record from database
@@ -84,7 +84,7 @@ namespace CRUDReact.Controllers
         {
             try
             {
-                using (TransactionModelEntities db = new TransactionModelEntities())
+                using (TransactionEntities db = new TransactionEntities())
                 {
                     Sale saledata = db.Sales.Find(id);
                     db.Sales.Remove(saledata);

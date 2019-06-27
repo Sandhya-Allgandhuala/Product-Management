@@ -64,11 +64,11 @@ export default class AddeditSales extends Component {
             const updatedRecord = Object.assign({}, state.Info, { [name]: value });
             return { Info: updatedRecord };
             console.log("handlechange");
-            
-        });
 
+        });
     }
 
+    
     save() {
         const recordToSave = Object.assign({}, this.state.Info);
         this.props.save(recordToSave);
@@ -106,8 +106,7 @@ export default class AddeditSales extends Component {
                             placeholder="Select Customer"
                             onChange={this.handleChange}
                             compact
-                            options={this.state.CustomerData.map(CustomerRecord => ({
-                                // return: was this a typo?
+                            options={this.state.CustomerData.map(CustomerRecord => ({                                
                                 name: CustomerRecord.ID,//CustomerRecord.ID
                                 key: CustomerRecord.ID,//CustomerRecord.ID
                                 value: CustomerRecord.ID, // This is the value that gets passed to 'handlechange' as event.target.value//CustomerRecord.ID
@@ -118,12 +117,11 @@ export default class AddeditSales extends Component {
                         <Form.Select
                             required
                             label="Product"
-                            name="ProductId"
+                            name="ProductId"                          
                             placeholder="Select Product"
                             onChange={this.handleChange}
                             compact
-                            options={this.state.ProductData.map(ProductRecord => ({
-                                // return: was this a typo?
+                            options={this.state.ProductData.map(ProductRecord => ({                                
                                 name: ProductRecord.Id,//ProductRecord.Id
                                 key: ProductRecord.Id,//ProductRecord.Id
                                 value: ProductRecord.Id, // This is the value that gets passed to 'handlechange' as event.target.value//ProductRecord.Id
@@ -137,8 +135,7 @@ export default class AddeditSales extends Component {
                             placeholder="Select Store"
                             onChange={this.handleChange}
                             compact
-                            options={this.state.StoreData.map(StoreRecord => ({
-                                // return: was this a typo?
+                            options={this.state.StoreData.map(StoreRecord => ({                                
                                 name: StoreRecord.Id,//StoreRecord.Id
                                 key: StoreRecord.Id,//StoreRecord.Id
                                 value: StoreRecord.Id, // This is the value that gets passed to 'handlechange' as event.target.value,//StoreRecord.Id

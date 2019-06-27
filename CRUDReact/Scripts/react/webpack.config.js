@@ -6,7 +6,7 @@
         Customer:  "./Components/Customer.jsx",
         Product: "./Components/Product.jsx",
         Store: "./Components/Store.jsx",
-        Sales: "./Components/Sales.jsx"
+        Sales: "./Components/sales.jsx"
     },
     output: {
         path: __dirname + "/dist",

@@ -101,6 +101,16 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Models\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\Transactionmodel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Transactionmodel.edmx</DependentUpon>
@@ -120,7 +130,16 @@
     <Content Include="Models\Transactionmodel.edmx.diagram">
       <DependentUpon>Transactionmodel.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\CRUDReact20190624021943 - Web Deploy.pubxml" />
+    <EntityDeploy Include="Models\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\crudoperations79 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CRUDOperationswithReact - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CRUDReact20190625121804 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -132,7 +151,7 @@
     <Content Include="Scripts\react\Components\AddeditSales.jsx" />
     <Content Include="Scripts\react\Components\AddeditStore.jsx" />
     <Content Include="Scripts\react\Components\Index.jsx" />
-    <Content Include="Scripts\react\Components\Sales.jsx" />
+    <Content Include="Scripts\react\Components\sales.jsx" />
     <Content Include="Scripts\react\dist\Customer.bundle.js" />
     <Content Include="Scripts\react\dist\Index.bundle.js" />
     <Content Include="Scripts\react\dist\Product.bundle.js" />
@@ -293,7 +312,9 @@
     <Content Include="Scripts\react\Semantic-UI-CSS-master\Semantic-UI-CSS-master\themes\default\assets\images\flags.png" />
     <Content Include="Scripts\react\Components\Store.jsx" />
     <Content Include="Scripts\react\webpack.config.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\react\package-lock.json" />
     <Content Include="Scripts\react\package.json" />
   </ItemGroup>
@@ -307,16 +328,31 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Customer.cs">
-      <DependentUpon>Transactionmodel.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs">
-      <DependentUpon>Transactionmodel.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Sale.cs">
-      <DependentUpon>Transactionmodel.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Store.cs">
-      <DependentUpon>Transactionmodel.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Transactionmodel.Context.cs">
       <AutoGen>True</AutoGen>

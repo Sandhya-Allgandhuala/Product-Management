@@ -18,7 +18,7 @@ namespace CRUDReact.Controllers
         [HttpGet]
         public JsonResult GetStoreData()
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
                 var st0 = db.Stores.ToList();
                 var data = st0.Select(x => new { x.Id, x.Name, x.Address });
@@ -33,7 +33,7 @@ namespace CRUDReact.Controllers
         {
             try
             {
-                using (TransactionModelEntities db = new TransactionModelEntities())
+                using (TransactionEntities db = new TransactionEntities())
                 {
                     db.Stores.Add(store);
                     db.SaveChanges();
@@ -50,7 +50,7 @@ namespace CRUDReact.Controllers
         [HttpPut]
         public JsonResult UpdateStoreData(Store store)
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
                 if (ModelState.IsValid)
                 {
@@ -84,7 +84,7 @@ namespace CRUDReact.Controllers
         {
             try
             {
-                using (TransactionModelEntities db = new TransactionModelEntities())
+                using (TransactionEntities db = new TransactionEntities())
                 {
                     Store store = db.Stores.Find(id);
                     db.Stores.Remove(store);

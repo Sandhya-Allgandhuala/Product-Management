@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CRUDReact.Controllers
@@ -14,18 +15,21 @@ namespace CRUDReact.Controllers
         {
             return View();
         }
-
+      
         //fetch data from database
         [HttpGet]
-        public JsonResult GetCustomerData()
+       public  JsonResult GetCustomerData()
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
-                var st0 = db.Customers.ToList();
-                var data = st0.Select(x => new { x.ID, x.Name,x.Address });
+                var data1 = db.Customers.ToList();
+                //  var st0 = db.Customers.ToList();
+                var data = data1.Select(x => new { x.ID, x.Name, x.Address });
                 return Json(data, JsonRequestBehavior.AllowGet);
 
             }
+
+
         }
 
         //Add record to database
@@ -34,16 +38,16 @@ namespace CRUDReact.Controllers
          {
               try
              {
-                 using (TransactionModelEntities db = new TransactionModelEntities())
+                 using (TransactionEntities db = new TransactionEntities())
                   {
                       db.Customers.Add(customer);
                       db.SaveChanges();
-                      return Json(new { success = true, data = customer });
+                      return Json(new { success = true, data = customer }, JsonRequestBehavior.AllowGet);
                   }
               }
               catch          
               {
-                  return Json(new { success = false, message = "Invalid customer given" });
+                  return Json(new { success = false, message = "Invalid customer given" }, JsonRequestBehavior.AllowGet);
               }
 
          }
@@ -51,7 +55,7 @@ namespace CRUDReact.Controllers
         [HttpPut]
         public JsonResult UpdateCustomerData(Customer customer)
         {
-            using (TransactionModelEntities db = new TransactionModelEntities())
+            using (TransactionEntities db = new TransactionEntities())
             {
                 if (ModelState.IsValid)
                 {
@@ -85,7 +89,7 @@ namespace CRUDReact.Controllers
         {
             try
             {
-                using (TransactionModelEntities db = new TransactionModelEntities())
+                using (TransactionEntities db = new TransactionEntities())
                 {
                     Customer customer = db.Customers.Find(id);
                     db.Customers.Remove(customer);

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+﻿import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Icon, Confirm, Container } from "semantic-ui-react";
 import AddeditSales from './AddeditSales.jsx';
 import Index from './Index.jsx'
 
 export default class SalesList extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -15,9 +15,9 @@ export default class SalesList extends Component {
             showModal: false,
             showConfirm: false,
             record: {}
-                        
-        }; 
-        
+
+        };
+
         // Called by the onClick event of Add New button.
         this.addNew = this.addNew.bind(this);
         // Called by one of the Edit buttons' click events.
@@ -64,7 +64,7 @@ export default class SalesList extends Component {
 
     addNew() {
         this.setState({
-            record: {}, 
+            record: {},
             showModal: true
         });
     }
@@ -88,13 +88,13 @@ export default class SalesList extends Component {
         if (recordToSave.ID) {
             this.update(recordToSave, closeModal);
         } else {
-             this.create(recordToSave, closeModal);
-           
+            this.create(recordToSave, closeModal);
+
         }
     }
-    
+
     create(recordToCreate, callback) {
-        
+
         const createRecord = JSON.stringify(recordToCreate);
         console.log(recordToCreate);
         console.log(createRecord);
@@ -105,7 +105,7 @@ export default class SalesList extends Component {
             }),
             body: createRecord
         }) // We're parsing the response as JSON.
-            .then(response => response.json())            
+            .then(response => response.json())
             .then(bodyAsObject => {
                 if (bodyAsObject.success) {
                     this.setState(state => {
@@ -118,7 +118,7 @@ export default class SalesList extends Component {
                             }))                        
                     }, callback);
                 } else {
-                        this.setState(
+                    this.setState(
                         {
                             error: bodyAsObject.message
                         },
@@ -137,7 +137,7 @@ export default class SalesList extends Component {
     }
 
 
-    update(recordToUpdate, callback) {       
+    update(recordToUpdate, callback) {
         const editRecord = JSON.stringify(recordToUpdate);
         console.log(recordToUpdate);
         fetch('/Sales/UpdateSalesData/' +
@@ -148,25 +148,25 @@ export default class SalesList extends Component {
                     "Content-Type": "application/json"
                 }),
                 body: editRecord
-                
+
             }
         )
             .then(response => response.json())
             .then(bodyAsObject => {
                 if (bodyAsObject.success) {
-                    this.setState(state => 
-                        {
-                        fetch('/Sales/GetSalesData/')
-                            .then(response => response.json())
-                            .then(SalesData => this.setState({
-                                SalesData,
-                                isLoading: true
 
-                            }))
-                          
-                      },
-                       callback
-                   );
+                    this.setState(state => {
+                        
+                            fetch('/Sales/GetSalesData/')
+            .then(response => response.json())
+                        .then(SalesData => this.setState({
+                            SalesData,
+                            isLoading: true
+
+                        }))
+                        },
+                        callback
+                    );
                 } else {
                     this.setState(
                         {
@@ -232,11 +232,11 @@ export default class SalesList extends Component {
 
     render() {
 
-        return ( 
+        return (
             this.state.error ?
                 <div>{this.state.error}</div>
                 :
-                <div>                    
+                <div>
                     <React.Fragment>
                         {this.state.showModal && (
                             <AddeditSales
@@ -249,22 +249,22 @@ export default class SalesList extends Component {
                         )}
                         {this.state.showConfirm && (
                             <Confirm
-                                
+
                                 open={true}
                                 onCancel={this.cancelDelete}
                                 onConfirm={this.confirmDelete}
                             />
                         )}
                         <div><Index /></div>
-                        <br/>
+                        <br />
                         <Button className="ui primary button" onClick={this.addNew}>Add Sales</Button>
                         <Table striped>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Customer</Table.HeaderCell>
                                     <Table.HeaderCell>Product</Table.HeaderCell>
-                                    <Table.HeaderCell>Store</Table.HeaderCell>
-                                    <Table.HeaderCell>DateSold</Table.HeaderCell>
+                                    <Table.HeaderCell>Sales</Table.HeaderCell>
+                                    <Table.HeaderCell>Date Sold</Table.HeaderCell>
                                     <Table.HeaderCell>Actions</Table.HeaderCell>
                                     <Table.HeaderCell>Actions</Table.HeaderCell>
                                 </Table.Row>
@@ -292,9 +292,9 @@ export default class SalesList extends Component {
                             </Table.Body>
                         </Table>
                     </React.Fragment>
-                
-                    </div>
-                
+
+                </div>
+
         );
     }
 }
@@ -305,4 +305,3 @@ const app = document.getElementById('Salesmain');
 ReactDOM.render(
     <SalesList />, app
 );
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
