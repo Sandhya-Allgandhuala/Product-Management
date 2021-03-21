@@ -21,9 +21,9 @@ namespace CRUDReact.Controllers
         {
             using (TransactionEntities db = new TransactionEntities())
             {
-                var st0 = db.Products.ToList();
-                var data = st0.Select(x => new { x.Id, x.Name, x.Price });
-                return Json(data, JsonRequestBehavior.AllowGet);
+                var Product = db.Products.ToList();
+                var Products = Product.Select(x => new { x.Id, x.Name, x.Price });
+                return Json(Products, JsonRequestBehavior.AllowGet);
 
             }
         }
