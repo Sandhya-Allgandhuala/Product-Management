@@ -22,10 +22,9 @@ namespace CRUDReact.Controllers
         {
             using (TransactionEntities db = new TransactionEntities())
             {
-                var data1 = db.Customers.ToList();
-                //  var st0 = db.Customers.ToList();
-                var data = data1.Select(x => new { x.ID, x.Name, x.Address });
-                return Json(data, JsonRequestBehavior.AllowGet);
+                var users = db.Customers.ToList();
+                var customers = users.Select(x => new { x.ID, x.Name, x.Address });
+                return Json(customers, JsonRequestBehavior.AllowGet);
 
             }
 
